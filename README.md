@@ -8,7 +8,7 @@
 
 2. Adham's
 	- specifier.c
-	- convert-number.c
-	- string-fields.c
+	- convert-number.c(done)
+	- string-fields.c(done)
 	- number.c
 	- simple-pointers.c
