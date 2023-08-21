@@ -9,42 +9,46 @@
 
 int _printf(const char *format, ...)
 {
-        int sum = 0;
-        va_list ap;
-        char *p, *start;
+        int num_of_bytes = 0;
+        va_list args;
+        char *str, *start_specs;
         params_t params = PARAMS_INIT;
 
-        va_start(ap, format);
+        va_start(args, format);
 
         if (!format || (format[0] == '%' && !format[1]))
                 return (-1);
         if (format[0] == '%' && format[1] == ' ' && !format[2])
                 return (-1);
-
-        for (p = (char *)format; *p; p++)
+        // Returns negative value in case of Unexpected error
+        for (str = (char *)format; *str; str++)
         {
-                init_params(&params, ap);
-                if (*p != '%')
+                init_params(&params, args);
+                // if it is a normal string
+                if (*str != '%')
                 {
-                        sum += _putchar(*p);
+                        num_of_bytes += _putchar(*str);
                         continue;
                 }
-                start = p;
-                p++;
-                while (get_flag(p, &params))
+                start_specs = str;
+                str++;
+
+                // checks for any falgs added or width || precision
+                while (get_flag(str, &params))
                 {
-                        p++;
+                        str++;
                 }
-                p = get_width(p, ap, &params);
-                p = get_precision(p, &params, ap);
-                if (get_modifier(p, &params))
-                        p++;
-                if (!get_specifier(p))
-                        sum += print_from_to(start, p, params.l_modifier || params.h_modifier ? p - 1 : 0);
+                str = get_width(str, args, &params);
+                str = get_precision(str, &params, args);
+                if (get_modifier(str, &params))
+                        str++;
+                // if not found a specifier or a normal string
+                if (!get_specifier(str))
+                        num_of_bytes += print_from_to(start_specs, str, params.l_modifier || params.h_modifier ? str - 1 : 0);
                 else
-                        sum += get_print_func(p, ap, &params);
+                        num_of_bytes += get_print_func(str, args, &params);
         }
         _putchar(BUF_FLUSH);
-        va_end(ap);
-        return (sum);
+        va_end(args);
+        return (num_of_bytes);
 }

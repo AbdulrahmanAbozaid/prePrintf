@@ -21,10 +21,10 @@ int _isdigit(char c)
 
 int _strlen(char *s)
 {
-        int i = 0;
+        int len = 0;
         while (*s++)
-                i++;
-        return (i);
+                len++;
+        return (len);
 }
 
 /**
@@ -36,31 +36,33 @@ int _strlen(char *s)
 
 int print_number(char *str, params_t *params)
 {
-        unsigned int i = _strlen(str);
-        int neg = (!params->unsign && *str == '-');
+        unsigned int len = _strlen(str);
+        int negative = (!params->unsign && *str == '-');
 
+        // zero case
         if (!params->precision && *str == '0' && !str[1])
                 str = "";
-        if (neg)
+        if (negative)
         {
                 str++;
-                i--;
+                len--;
         }
 
         if (params->precision != UINT_MAX)
-                while (i++ < params->precision)
+                while (len++ < params->precision)
                         *--str = '0';
-        if (neg)
+        if (negative)
                 *--str = '-';
 
         if (!params->minus_flag)
                 return (print_number_right_shift(str, params));
-        else return (print_number_left_shift(str, params));
+        else
+                return (print_number_left_shift(str, params));
 }
 
 
 /**
- * print_number_right_shift - with opts
+ * print_number_right_shift - pad start
  * @str: string
  * @params: struct
  * Return: printed
@@ -68,40 +70,40 @@ int print_number(char *str, params_t *params)
 
 int print_number_right_shift(char *str, params_t *params)
 {
-        unsigned int n = 0, neg, neg2, i = _strlen(str);
+        unsigned int num_of_bytes = 0, negative, t_negative, len = _strlen(str);
         char pad_char = ' ';
 
         if (params->zero_flag && !params->minus_flag)
                 pad_char = '0';
-        neg = neg2 = (!params->unsign && *str == '-');
-        if (neg && i < params->width && pad_char == '0' && !params->minus_flag)
+        negative = t_negative = (!params->unsign && *str == '-');
+        if (negative && len < params->width && pad_char == '0' && !params->minus_flag)
                 str++;
         else
-                neg = 0;
-        if ((params->plus_flag && !neg2) || (!params->plus_flag && params->space_flag && !neg2))
-                i++;
-        if (neg && pad_char == '0')
-                n += _putchar('-');
-        if (params->plus_flag && !neg2 && pad_char == '0' && !params->unsign)
-                n += _putchar('+');
-        else if (!params->plus_flag && params->space_flag && !neg2 && !params->unsign && params->zero_flag)
-                n += _putchar(' ');
+                negative = 0;
+        if ((params->plus_flag && !t_negative) || (!params->plus_flag && params->space_flag && !t_negative))
+                len++;
+        if (negative && pad_char == '0')
+                num_of_bytes += _putchar('-');
+        if (params->plus_flag && !t_negative && pad_char == '0' && !params->unsign)
+                num_of_bytes += _putchar('+');
+        else if (!params->plus_flag && params->space_flag && !t_negative && !params->unsign && params->zero_flag)
+                num_of_bytes += _putchar(' ');
 
-        while (i++ < params->width)
-                n += _putchar(pad_char);
-        if (neg && pad_char == ' ')
-                n += _putchar('-');
-        if (params->plus_flag && !neg2 && pad_char == ' ' && !params->unsign)
-                n += _putchar('+');
-        else if (!params->plus_flag && params->space_flag && !neg2 && !params->unsign && !params->zero_flag)
-                n += _putchar(' ');
-        n += _puts(str);
-        return (n);
+        while (len++ < params->width)
+                num_of_bytes += _putchar(pad_char);
+        if (negative && pad_char == ' ')
+                num_of_bytes += _putchar('-');
+        if (params->plus_flag && !t_negative && pad_char == ' ' && !params->unsign)
+                num_of_bytes += _putchar('+');
+        else if (!params->plus_flag && params->space_flag && !t_negative && !params->unsign && !params->zero_flag)
+                num_of_bytes += _putchar(' ');
+        num_of_bytes += _puts(str);
+        return (num_of_bytes);
 }
 
 
 /**
- * print_number_left_shift - with opts
+ * print_number_left_shift - pad end
  * @str: string
  * @params: struct
  * Return: printed
@@ -109,25 +111,25 @@ int print_number_right_shift(char *str, params_t *params)
 
 int print_number_left_shift(char *str, params_t *params)
 {
-        unsigned int n = 0, neg, neg2, i = _strlen(str);
+        unsigned int num_of_bytes = 0, negative, t_negative, len = _strlen(str);
         char pad_char = ' ';
 
         if (params->zero_flag && !params->minus_flag)
                 pad_char = '0';
-        neg = neg2 = (!params->unsign && *str == '-');
-        if (neg && i < params->width && pad_char == '0' && !params->minus_flag)
+        negative = t_negative = (!params->unsign && *str == '-');
+        if (negative && i < params->width && pad_char == '0' && !params->minus_flag)
                 str++;
         else
-                neg = 0;
+                negative = 0;
 
-        if (params->plus_flag && !neg2 && !params->unsign)
-                n += _putchar('+'), i++;
-        else if (params->space_flag && !neg2 && !params->unsign)
-                n += _putchar(' '), i++;
+        if (params->plus_flag && !t_negative && !params->unsign)
+                num_of_bytes += _putchar('+'), len++;
+        else if (params->space_flag && !t_negative && !params->unsign)
+                num_of_bytes += _putchar(' '), len++;
 
-        n += _puts(str);
+        num_of_bytes += _puts(str);
 
-        while (i++ < params->width)
-                n += _putchar(pad_char);
-        return (n);
+        while (len++ < params->width)
+                num_of_bytes += _putchar(pad_char);
+        return (num_of_bytes);
 }

@@ -3,9 +3,12 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <limits.h>
+#include <stdlib.h>
 
 #define UNUSED(x) (void)(x)
-#define BUFF_SIZE 1024
+#define OUTPUT_BUF_SIZE 1024
+#define BUF_FLUSH -1
 
 /* FLAGS */
 #define F_MINUS 1
@@ -17,6 +20,12 @@
 /* SIZES */
 #define S_LONG 2
 #define S_SHORT 1
+
+#define NULL_STRING "(null)"
+#define CONVERT_LOWERCASE 1
+#define CONVERT_UNSIGNED 2
+#define PARAMS_INIT {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+
 
 /**
  * struct fmt - Struct op
@@ -30,16 +39,46 @@ struct fmt
 	int (*fn)(va_list, char[], int, int, int, int);
 };
 
+/**
+ * struct params - parameters
+ * @unsign: if unsigned
+ * @plus_flag: left shift
+ * @space_flag: [ ]
+ * @hashtag_flag: to write 0x or 0
+ * @zero_flag: pad by 0s
+ * @minus_flag: right shift
+ * @width : field width
+ * @precision: .
+ * @h_modifier: short
+ * @l_modifier: long
+ */
+
+typedef struct params
+{
+        // params are passed in the format string so we take it into a struct param
+        // to use it anywhere
+        unsigned int unsign : 1;
+
+        unsigned int plus_flag : 1;
+        unsigned int space_flag : 1;
+        unsigned int hashtag_flag : 1;
+        unsigned int zero_flag : 1;
+        unsigned int minus_flag : 1;
+
+        unsigned int width;
+        unsigned int precision;
+
+        unsigned int h_modifier : 1;
+        unsigned int l_modifier : 1;
+} params_t;
+
 
 /**
- * typedef struct fmt fmt_t - Struct op
- *
- * @fmt: The format.
- * @fm_t: The function associated.
+ * struct specifier - %c, %s, ..
+ * @specifier: spec.
+ * @f: The function associated.
  */
-typedef struct fmt fmt_t;
 
-<<<<<<< HEAD
 typedef struct specifier
 {
         char *specifier;
@@ -94,8 +133,6 @@ void init_params(params_t *params, va_list ap);
 char *get_precision(char *p, params_t *params, va_list ap);
 
 /* _printf.c */
-=======
->>>>>>> 6d9fee858fb56b277b03c5e1c40d9fdce4f84e71
 int _printf(const char *format, ...);
 int handle_print(const char *fmt, int *i,
 va_list list, char buffer[], int flags, int width, int precision, int size);
@@ -162,6 +199,7 @@ int write_pointer(char buffer[], int ind, int length,
 int write_unsgnd(int is_negative, int ind,
 char buffer[],
 	int flags, int width, int precision, int size);
+
 /****************** UTILS ******************/
 int is_printable(char);
 int append_hexa_code(char, char[], int);
