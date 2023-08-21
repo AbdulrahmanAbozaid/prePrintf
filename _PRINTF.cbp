@@ -31,7 +31,38 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="_printf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="_puts.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="convert_number.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="main.h" />
+		<Unit filename="number.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="params.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="print_functions.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="print_number.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="simple_printers.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="specifier.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="string_fields.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>

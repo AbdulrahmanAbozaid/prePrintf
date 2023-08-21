@@ -65,14 +65,14 @@ typedef struct specifier
 
 /* _puts.c */
 int _puts(char *str);
-int _putchar(int c);
+int _putchar(char c);
 
 /* print_functions.c */
 int print_char(va_list ap, params_t *params);
 int print_int(va_list ap, params_t *params);
 int print_string(va_list ap, params_t *params);
 int print_percet(va_list ap, params_t *params);
-int print_s(va_list ap, params_t *params);
+int print_S(va_list ap, params_t *params);
 
 /* number.c */
 char *convert(long int num, int base, int flags, params_t *params);
