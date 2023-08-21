@@ -7,8 +7,8 @@
 	- printf.c
 
 2. Adham's
-	- specifier.c(done)
+	- specifier.c
 	- convert-number.c(done)
-	- string-fields.c
+	- string-fields.c(done)
 	- number.c
 	- simple-pointers.c
